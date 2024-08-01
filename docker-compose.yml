@@ -11,7 +11,7 @@ services:
       MYSQL_USER: bumblebee
       MYSQL_PASSWORD: Anhyeuem@1
     ports:
-      - "3307:3306"
+      - "3307:3307"
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
@@ -30,7 +30,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/bumblebee
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3307/bumblebee
       SPRING_DATASOURCE_USERNAME: bumblebee
       SPRING_DATASOURCE_PASSWORD: Anhyeuem@1
 
