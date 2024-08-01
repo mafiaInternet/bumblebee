@@ -1,10 +1,9 @@
-
 spring:
   application:
     name: bumblebee
   datasource:
-    url: jdbc:mysql://mysqldb:3306/demo
-    username: root
+    url: jdbc:mysql://mysqldb:3306/bumblebee
+    username: bumblebee
     password: Anhyeuem@1
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -16,10 +15,3 @@ spring:
   data:
     rest:
       base-path: /api
-
-
-
-
-
-
-
