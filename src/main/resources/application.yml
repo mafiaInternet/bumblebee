@@ -3,7 +3,7 @@ spring:
   application:
     name: bumblebee
   datasource:
-    url: jdbc:mysql://localhost:3306/demo
+    url: jdbc:mysql://mysqldb:3306/demo
     username: root
     password: Anhyeuem@1
     driver-class-name: com.mysql.cj.jdbc.Driver

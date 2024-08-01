@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  mysql:
+  mysqldb:
     image: mysql:8.0
     container_name: mysql
     restart: always
@@ -16,13 +16,15 @@ services:
       - mysql-data:/var/lib/mysql
 
   app:
+    build: .
     image: my-spring-boot-app
     depends_on:
-      - mysql
+      mysqldb:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/demo
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Anhyeuem@1
 
