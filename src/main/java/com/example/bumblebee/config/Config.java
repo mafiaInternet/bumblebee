@@ -28,7 +28,7 @@ public class Config {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration cfg = new CorsConfiguration();
                         cfg.setAllowedOrigins(Arrays.asList(
-                                "http://localhost:3000"
+                                "https://frontendbumblebee.onrender.com"
 
                         ));
                         cfg.setAllowedMethods(Collections.singletonList("*"));
