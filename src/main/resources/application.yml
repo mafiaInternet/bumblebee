@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: bumblebee
   datasource:
     url: jdbc:mysql://root:CZJjKjRjCqWSxeVrGWEBdEVTQlcMuTfx@mysql.railway.internal:3306/railway
     username: root
