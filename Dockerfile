@@ -5,8 +5,8 @@ FROM maven:3.9.8-amazoncorretto-17-al2023 AS build
 WORKDIR /app
 
 # Copy the pom.xml and source code into the container
-COPY pom.xml .
-COPY src ./src
+COPY . .
+
 
 # Build the application, skipping tests
 RUN mvn clean package -DskipTests
