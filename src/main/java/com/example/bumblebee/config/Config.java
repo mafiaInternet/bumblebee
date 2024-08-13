@@ -122,28 +122,8 @@ public class Config {
                 .authorizeRequests(authorize -> authorize.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
                 .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
                 .csrf().disable()
-<<<<<<< HEAD
                 .cors().configurationSource(corsConfigurationSource()).and()
                 .httpBasic().and().formLogin();
-=======
-                .cors().configurationSource(new CorsConfigurationSource() {
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                        CorsConfiguration cfg = new CorsConfiguration();
-                        cfg.setAllowedOrigins(Arrays.asList(
-                                "https://frontendbumblebee.onrender.com"
-
-                        ));
-                        cfg.setAllowedMethods(Collections.singletonList("*"));
-                        cfg.setAllowCredentials(true);
-                        cfg.setAllowedHeaders(Collections.singletonList("*"));
-                        cfg.setExposedHeaders(Arrays.asList("Authorization"));
-                        cfg.setMaxAge(3600L);
-                        return cfg;
-                    }
-                }).and().httpBasic().and().formLogin();
->>>>>>> b62422d2020adf65b47d2873767f63ef51a7bcd6
-
         return http.build();
     }
     @Bean
