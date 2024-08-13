@@ -19,8 +19,15 @@ WORKDIR /app
 # Copy the JAR file from the build stage
 COPY --from=build /app/target/bumblebee-0.0.1-SNAPSHOT.jar bumblebee.jar
 
+<<<<<<< HEAD
 # Expose the port the application runs on
 EXPOSE 8080
 
 # Command to run the application
 ENTRYPOINT ["java", "-jar", "bumblebee.jar"]
+=======
+COPY --from=build /app/target/bumblebee-0.0.1-SNAPSHOT.jar drcomputer.jar
+EXPOSE 8080 
+
+ENTRYPOINT ["java","-jar","drcomputer.jar"]
+>>>>>>> b62422d2020adf65b47d2873767f63ef51a7bcd6
