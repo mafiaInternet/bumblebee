@@ -1,11 +1,13 @@
 package com.example.bumblebee.controller;
 
 import com.example.bumblebee.exception.CartException;
+import com.example.bumblebee.exception.ProductException;
 import com.example.bumblebee.exception.UserException;
 import com.example.bumblebee.model.dao.CartDao;
 import com.example.bumblebee.model.entity.Cart;
 import com.example.bumblebee.model.entity.User;
 import com.example.bumblebee.request.AddItemRequest;
+import com.example.bumblebee.request.AddItemRequestWrapper;
 import com.example.bumblebee.request.AddOrderItemRequest;
 import com.example.bumblebee.response.ApiResponse;
 import com.example.bumblebee.service.CartItemService;
@@ -17,8 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/cart")
-//@Tag(name ="Cart Managemet", description="find user cart, add item to cart")
+@RequestMapping("/cart")
+
 public class CartController {
     @Autowired
     private CartService cartService;
@@ -33,7 +35,7 @@ public class CartController {
     @GetMapping("/user")
     public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt) throws Exception {
         User user=userService.findUserProfileByJwt(jwt);
-        Cart cart=cartService.findCartByUserId(user.getId());
+        Cart cart=cartDao.findByUserId(user.getId());
 
         return new ResponseEntity<>(cart, HttpStatus.ACCEPTED);
     }
@@ -80,10 +82,18 @@ public class CartController {
     @PutMapping("/cartItem/{cartItemId}/update")
     public ResponseEntity<Cart> updateCartItem(@PathVariable Long cartItemId, @RequestHeader("Authorization") String jwt, @RequestBody int quantity) throws Exception {
         User user =userService.findUserProfileByJwt(jwt);
-        System.out.println(quantity);
         cartItemService.updateCartItem(user, cartItemId, quantity);
-        Cart cart = cartService.findCartByUserId(user.getId());
+        Cart cart = cartDao.findByUserId(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
+    }
+
+    @PutMapping("/test")
+    public ResponseEntity<Cart> test(@RequestBody AddItemRequestWrapper req) throws UserException, ProductException {
+        if (req.getCart() == null){
+            req.setCart(new Cart());
+        }
+        Cart test = cartService.test(req.getUser(), req.getCart(), req.getReq());
+        return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
 }

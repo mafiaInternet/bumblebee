@@ -1,10 +1,15 @@
 spring:
-  application:
-    name: bumblebee
+  mvc:
+    cors:
+      allowed-origin-patterns: "*"
+      allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+      allowed-headers: "Authorization,Cache-Control,Content-Type"
+      allow-credentials: true
+      max-age: 3600
   datasource:
-    url: jdbc:mysql://root:CZJjKjRjCqWSxeVrGWEBdEVTQlcMuTfx@mysql.railway.internal:3306/railway
+    url: jdbc:mysql://root:xniJeYxlnZmzhAFAIZtZfRhDIMlmgFQw@viaduct.proxy.rlwy.net:54131/railway
     username: root
-    password: CZJjKjRjCqWSxeVrGWEBdEVTQlcMuTfx
+    password: xniJeYxlnZmzhAFAIZtZfRhDIMlmgFQw
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true

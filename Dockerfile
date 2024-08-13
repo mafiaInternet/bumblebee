@@ -15,7 +15,7 @@ FROM openjdk:24-slim-bullseye
 
 # Set the working directory
 WORKDIR /app
-
+#mysql://root:xniJeYxlnZmzhAFAIZtZfRhDIMlmgFQw@viaduct.proxy.rlwy.net:54131/railway
 # Copy the JAR file from the build stage
 COPY --from=build /app/target/bumblebee-0.0.1-SNAPSHOT.jar bumblebee.jar
 

@@ -20,14 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-//import java.util.Base64;
 
-//import org.apache.commons.collections.*;
-
-//import org.apache.commons.collections4.functors.;
 @RestController
 @RequestMapping("/auth")
-
+@CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
 public class AuthController {
 
     @Autowired
@@ -45,12 +41,12 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
     public ResponseEntity<AuthResponse>createUserHandler(@RequestBody User user) throws Exception {
         String email=user.getEmail();
         String password=user.getPassword();
         String name = user.getName();
         String mobile = user.getMobile();
-
         User isEmailExist= userDao.findByEmail(email);
         if(isEmailExist!=null){
             throw new UserException("Email is Already Userd anothor accoung");
@@ -74,6 +70,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
     public ResponseEntity<AuthResponse>loginUserHandler(@RequestBody LoginRequest loginRequest) throws Exception {
         String username=loginRequest.getEmail();
         String password=loginRequest.getPassword();
@@ -103,27 +100,8 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.ACCEPTED);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<AuthResponse>loginUserHandler(@RequestBody LoginRequest loginRequest) throws Exception {
-//        String username=loginRequest.getEmail();
-//        String password=loginRequest.getPassword();
-//
-//        Authentication authentication= authenticate(username, password);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        System.out.println("auth"+authentication.toString());
-//        System.out.println("vclll"+ authentication);
-//        String token = jwtProvider.generateToken(authentication);
-//
-//        AuthResponse authResponse=new AuthResponse(token, "Sign in success");
-//
-//        return new ResponseEntity<>(authResponse, HttpStatus.ACCEPTED);
-//    }
-
-
-
-
-
     @PostMapping("/logout")
+    @CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
     public ResponseEntity<AuthResponse> logoutUserHandler(){
 
         AuthResponse authResponse = new AuthResponse(null, "Logout success");

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryDao extends JpaRepository<Category, Integer> {
-    public Category findByName(String name);
+
 
 }

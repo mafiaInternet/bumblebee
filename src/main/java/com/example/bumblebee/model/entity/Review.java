@@ -28,6 +28,7 @@ public class Review {
     @Column(name = "rating")
     private float rating;
     private String response;
+    @Column(length = 1024)
     private List<String> imageUrls = new ArrayList<>();
     @ManyToOne
     private Product product;

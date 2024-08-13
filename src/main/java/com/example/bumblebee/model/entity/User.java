@@ -23,19 +23,11 @@ public class User {
     private String name;
     private String password;
     private String email;
+    private String birthday;
     private String role;
     private String mobile;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address=new ArrayList<>();
-
-//    @Embedded
-//    @ElementCollection
-//    @CollectionTable(name = "payment_infomation", joinColumns = @JoinColumn(name = "user_id"))
-//    private List<PaymenttInfomation> paymenttInfomations = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonIgnore
-//    private List<Rating> ratings=new ArrayList<>();
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

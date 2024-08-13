@@ -124,6 +124,7 @@ public class UserController {
         User user = userService.findUserProfileByJwt(jwt);
         System.out.println("update");
         Address address =userService.updateAddress(user,addressId, req);
+        System.out.println(req.toString());
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 

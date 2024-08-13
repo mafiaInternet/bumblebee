@@ -10,8 +10,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressRequest {
-    private String firstName;
-    private String lastName;
-    private String city;
+    private String name;
+    private String mobile;
+    private String province;
+    private String district;
+    private String ward;
+    private String description;
     private String state;
+
 }

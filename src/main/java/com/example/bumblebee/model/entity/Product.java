@@ -22,6 +22,7 @@ public class Product implements Comparable<Product>  {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+@Column(length = 2048)
     private List<String> listImageUrl = new ArrayList<>();
     private String description;
     private int price;
@@ -38,7 +39,7 @@ public class Product implements Comparable<Product>  {
 
     @Column(name = "num_ratings")
     private int numRatings;
-@OneToOne
+@ManyToOne
     private Category category;
 
     private LocalDateTime createAt;

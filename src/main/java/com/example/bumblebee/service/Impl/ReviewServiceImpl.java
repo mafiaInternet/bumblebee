@@ -6,6 +6,7 @@ import com.example.bumblebee.exception.ReviewException;
 import com.example.bumblebee.model.dao.ProductDao;
 import com.example.bumblebee.model.dao.ReviewDao;
 import com.example.bumblebee.model.dao.UserDao;
+import com.example.bumblebee.model.entity.Product;
 import com.example.bumblebee.model.entity.Review;
 import com.example.bumblebee.model.entity.User;
 import com.example.bumblebee.request.ReviewRequest;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -41,10 +43,16 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public Review createReview(ReviewRequest req, User user) throws ProductException, OrderException, ReviewException {
+    public Review createReview(ReviewRequest req, User user) throws ProductException {
         Review review = new Review();
+        Product product = productService.findProductById(req.getProductId());
         review.setRating(req.getRating());
         review.setName(user.getName());
+        for (String item: req.getImageUrls()){
+            System.out.println("imageUrl - " + item);
+            review.getImageUrls().add(item);
+        }
+        review.setProduct(product);
         review.setDesciption(req.getDescription());
         review.setUser(user);
         review.setOrder(req.getOrder());
@@ -67,22 +75,21 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> getReviewByProductId(Long productId, int rating){
-
         List<Review> reviews = new ArrayList<>();
         if(rating >= 1 && rating <= 5){
-            System.out.println("review nè -" + rating);
+
             reviews = reviewDao.getReviewByRating(productId, rating);
         }
 
         if(rating == 6){
-            System.out.println("review nè - "+ rating);
+
             reviews = reviewDao.getAllProductsReview(productId);
         }
 
         if (rating == 0) {
-            System.out.println("review nè - "+ rating);
-            for (Review review : reviewDao.findAll()) {
-                if (review.getImageUrls() != null) {
+
+            for (Review review : reviewDao.getAllProductsReview(productId)) {
+                if (review.getImageUrls().size() > 0) {
                     reviews.add(review);
                 }
             }

@@ -98,7 +98,9 @@ private CartItemService cartItemService;
         Order createOrder = new Order();
         Cart cart = createOrderRequest.getCart();
         Address address = createOrderRequest.getAddress() ;
-
+        if (address.getId() == null){
+            addressDao.save(address);
+        }
         List<OrderItem> orderItems = new ArrayList<>();
             for(CartItem item:cart.getCartItems()){
                 OrderItem createdOrderItem = orderItemService.createOrderItem(item);
@@ -112,6 +114,7 @@ private CartItemService cartItemService;
        createOrder.setDiscount(createOrderRequest.getDiscountedPrice());
        createOrder.getPaymentDetails().setPaymentMethod(createOrderRequest.getPaymentMethod());
        createOrder.setTotalPrice(cart.getTotalPrice());
+       createOrder.setOrderStatus("Đang chờ xác nhận");
         createOrder.setAddress(address);
         createOrder.setCreateAt(LocalDateTime.now());
         Order saveOrder = orderDao.save(createOrder);

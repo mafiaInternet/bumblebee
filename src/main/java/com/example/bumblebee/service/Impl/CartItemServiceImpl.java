@@ -32,7 +32,7 @@ public class CartItemServiceImpl implements CartItemService {
         cartItem.setQuantity(cartItem.getQuantity());
         cartItem.setPrice(cartItem.getProduct().getPrice()*cartItem.getQuantity());
         cartItem.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice()*cartItem.getQuantity());
-//        cartItem.setProduct(cartItem.getProduct());
+        cartItem.setProduct(cartItem.getProduct());
         CartItem createdCartItem = cartItemDao.save(cartItem);
 
         return createdCartItem;

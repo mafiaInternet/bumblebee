@@ -19,7 +19,6 @@ public interface CartService {
 
     Cart demo(User user, AddItemRequest req, CartItem[] cartItems) throws UserException, ProductException;
 
-    public Cart findCartByUserId(Long userId);
 
-
+    Cart test(User user, Cart cart, AddItemRequest req) throws UserException, ProductException;
 }

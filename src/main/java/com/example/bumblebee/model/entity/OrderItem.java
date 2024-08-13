@@ -26,7 +26,7 @@ public class OrderItem {
     private int quantity;
     private double price;
     private double discountedPrice;
-    @OneToOne
+    @ManyToOne
     private Product product;
     private long userId;
 }

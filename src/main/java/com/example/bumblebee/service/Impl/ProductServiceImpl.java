@@ -4,12 +4,9 @@ import com.example.bumblebee.exception.ProductException;
 import com.example.bumblebee.model.dao.CategoryDao;
 import com.example.bumblebee.model.dao.ColorDao;
 import com.example.bumblebee.model.dao.SizeDao;
-import com.example.bumblebee.model.entity.Color;
-import com.example.bumblebee.model.entity.Size;
+import com.example.bumblebee.model.entity.*;
 import com.example.bumblebee.service.CategoryService;
 import com.example.bumblebee.model.dao.ProductDao;
-import com.example.bumblebee.model.entity.Category;
-import com.example.bumblebee.model.entity.Product;
 import com.example.bumblebee.request.CreateProductRequest;
 
 import com.example.bumblebee.service.ProductService;
@@ -39,10 +36,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(CreateProductRequest req) {
 
-//        System.out.println(category);
-        Product product=new Product();
-        product.setTitle(req.getTitle());
 
+        Product product=new Product();
+
+        Category category = categoryService.findByNameId(req.getCategory().getNameId());
+
+        for(String item : req.getListImageUrl()){
+            product.getListImageUrl().add(item);
+        }
 
         List<Color> colors = new ArrayList<>();
         for(Color color: req.getColors()){
@@ -63,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
             colors.add(saveColor);
         }
-
+        product.setTitle(req.getTitle());
         product.setColors(colors);
         product.setDescription(req.getDescription());
         int discountdPrice = req.getPrice() * req.getDiscountPersent() / 100;
@@ -71,8 +72,7 @@ public class ProductServiceImpl implements ProductService {
         product.setDiscountPersent(req.getDiscountPersent());
         product.setPrice(req.getPrice());
         product.setTotalQuantity(req.getTotalQuantity());
-        product.setCategory(req.getCategory());
-        product.setListImageUrl(req.getListImageUrl());
+        product.setCategory(category);
         product.setCreateAt(LocalDateTime.now());
 
         Product savedProduct =productDao.save(product);

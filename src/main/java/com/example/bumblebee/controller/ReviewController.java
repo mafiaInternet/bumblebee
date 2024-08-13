@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
@@ -30,13 +30,15 @@ public class ReviewController {
     @PostMapping("/create")
     public ResponseEntity<Review> createReview(@RequestBody ReviewRequest req,
                                                @RequestHeader("Authorization") String jwt) throws Exception {
+
         User user=userService.findUserProfileByJwt(jwt);
+
         Review review=reviewService.createReview(req, user);
 
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
 
-    @PostMapping("/api/create/response")
+    @PostMapping("/create/response")
     public ResponseEntity<Review> createReviewResponse(@RequestBody ReviewResponse res, @RequestHeader("Authorization")String jwt) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
         Review review = reviewService.createResponseReview(res, user);

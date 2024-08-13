@@ -45,19 +45,18 @@ public class CartServiceImpl implements CartService {
         return cartDao.save(cart);
     }
 
+
+
     @Override
     public Cart addCartItem(User user, AddItemRequest req) throws ProductException, UserException {
-        Cart cart = cartDao.findByUserId(user.getId());
 
+        Cart cart = cartDao.findByUserId(user.getId());
         if(cart == null){
            cart = createCart(user.getId());
            cartDao.save(cart);
         }
         Product product=productService.findProductById(req.getProductId());
-
-
         CartItem isPresent=cartItemService.isCartItemExist(cart, product,req.getColor(), req.getSize(), user.getId());
-
         if(isPresent == null){
             CartItem cartItem=new CartItem();
             cartItem.setProduct(product);
@@ -70,19 +69,15 @@ public class CartServiceImpl implements CartService {
             cartItem.setSize(req.getSize());
             cartItem.setUserId(user.getId());
             CartItem createdCartItem=cartItemService.createCartItem(cartItem);
-//            cart.setCartItems((Set<CartItem>) createdCartItem);
             cart.getCartItems().add(createdCartItem);
             cart.setTotalItem(cart.getTotalItem() + 1);
-            System.out.println("totalItem 1 -" + cart.getCartItems().size());
+
         }else {
-            isPresent.setQuantity(isPresent.getQuantity() + 1);
+            isPresent.setQuantity(isPresent.getQuantity() + req.getQuantity());
             cartItemDao.save(isPresent);
         }
-        System.out.println("totalItem 2 -" + cart.getCartItems().size());
 
         return  cartDao.save(cart);
-
-
     }
 
 
@@ -163,6 +158,7 @@ public class CartServiceImpl implements CartService {
         }else{
             return cart;
         }
+
         cart.setTotalItem(totalItem);
         cart.setTotalPrice(totalPrice);
         cart.setTotalDiscountedPrice(totalDiscountedPrice);
@@ -170,26 +166,47 @@ public class CartServiceImpl implements CartService {
         System.out.println("Cart 2- " + cart);
         return cart;
     }
+
     @Override
-    public Cart findCartByUserId(Long userId) {
-        Cart cart =cartDao.findByUserId(userId);
-//        double totalPrice=0;
-//        double totalDiscountedPrice=0;
-//        int totalItem=0;
-//
-//        for(CartItem cartItem :cart.getCartItems()){
-//            totalPrice=totalPrice+cartItem.getPrice();
-//            totalDiscountedPrice=totalDiscountedPrice+cartItem.getDiscountedPrice();
-//            totalItem=totalItem+cartItem.getQuantity();
-//        }
-//
-//        cart.setTotalDiscountedPrice(totalDiscountedPrice);
-//        cart.setTotalItem(totalItem);
-//        cart.setTotalPrice(totalPrice);
-//        cart.setDiscount(totalPrice-totalDiscountedPrice);
-//        cartDao.save(cart);
+    public Cart test(User user, Cart cart, AddItemRequest req) throws UserException, ProductException {
+        if (user != null){
+            System.out.println("User - " + user.getId());
+            cart = cartDao.findByUserId(user.getId());
+            if(cart == null){
+                cart = createCart(user.getId());
+                cartDao.save(cart);
+            }
+        }
+        Product product=productService.findProductById(req.getProductId());
+        Boolean isPresent = false;
+        for (CartItem item: cart.getCartItems()){
+            if (item.getProduct().getId() == product.getId() && req.getColor().equals(item.getColor()) && req.getSize().equals(item.getSize())){
+                item.setQuantity(item.getQuantity() + req.getQuantity());
+                if (user != null && cart != null){
+                    cartItemDao.save(item);
+                }
+                isPresent = true;
+                break;
+            }
+        }
+        if (isPresent == false){
+            CartItem cartItem=new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(req.getQuantity());
+            cartItem.setColor(req.getColor());
+            cartItem.setImageUrl(req.getImageUrl());
+            double price=req.getQuantity()*product.getDiscountedPrice();
+            cartItem.setPrice(price);
+            cartItem.setSize(req.getSize());
+            cart.getCartItems().add(cartItem);
+            cart.setTotalItem(cart.getTotalItem() + 1);
+            if (user != null && cart != null){
+                cartItem.setUserId(user.getId());
+                cartItem.setCart(cart);
+                cartItemDao.save(cartItem);
+            }
+        }
         return cart;
     }
-
 
 }

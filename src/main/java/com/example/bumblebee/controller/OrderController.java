@@ -54,17 +54,11 @@ public class OrderController {
     }
 
     @PostMapping("/demo")
-    public ResponseEntity<Map<String, Object>> addOrder(@RequestHeader("Authorization") String jwt, @RequestBody CreateOrderRequest createOrderRequest) throws Exception {
+    public ResponseEntity<Order> addOrder(@RequestHeader("Authorization") String jwt, @RequestBody CreateOrderRequest createOrderRequest) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
 
         Order order = orderService.addOrder(user, createOrderRequest);
-//        ApiResponse res = new ApiResponse();
-//        res.setMessage("Create order success !!!");
-//        res.setStatus(true);
-        Map<String, Object> res = new HashMap<>();
-        res.put("message", "Create order success!!!");
-        res.put("status", true);
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 
 

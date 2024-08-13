@@ -19,5 +19,12 @@ public class Category {
  private String nameId;
     private String name;
 
-
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", nameId='" + nameId + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

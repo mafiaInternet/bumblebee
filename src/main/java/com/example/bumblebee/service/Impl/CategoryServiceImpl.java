@@ -21,6 +21,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category findByNameId(String nameId){
+        System.out.println("category - nameId - " + nameId);
+        for (Category category: categoryDao.findAll()){
+            if(category.getNameId().equals(nameId)){
+                System.out.println(category.toString());
+                System.out.println("find category nameId + " + category.getNameId());
+                return category;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void createCategory(){
         String[] id = {"ao-thun", "bady-tee", "ao-polo", "ao-so-mi", "ao-khoac", "hoodie", "quan", "quan-nu", "phu-kien"};
         String[] name = {"Áo thun", "Baby Tee", "Áo Polo", "Áo sơ mi", "Áo khoác", "Hoodie", "Quần", "Quần nữ", "Phụ kiện"};

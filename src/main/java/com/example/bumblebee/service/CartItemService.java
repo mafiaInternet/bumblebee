@@ -9,7 +9,6 @@ import com.example.bumblebee.model.entity.User;
 
 public interface CartItemService {
     public CartItem createCartItem(CartItem cartItem);
-//    public CartItem updateCartItem(Long userId, Long id, CartItem cartItem) throws CartException, UserException;
 
     public CartItem updateCartItem(User user, Long id, int quantity) throws CartException, UserException;
 

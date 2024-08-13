@@ -28,9 +28,10 @@ public class ProductController {
     private UserService userService;
 
     @GetMapping("/all")
+
     public ResponseEntity<List<Product>> getProducts(){
         List<Product> list = productDao.findAll();
-        return new ResponseEntity<>(list, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping("/sort/new")

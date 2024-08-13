@@ -1,5 +1,6 @@
 package com.example.bumblebee.model.entity;
 
+import com.example.bumblebee.request.AddressDelivery;
 import com.example.bumblebee.request.PaymentDetails;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,20 +23,20 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String orderId;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "order_items")
     private List<OrderItem> orderItems = new ArrayList<>();
-    //    private Set<OrderItem> orderItems=new HashSet<>();
     private LocalDateTime orderDate;
     private LocalDateTime deliveryDate;
-    @OneToOne
-    private Address address = new Address();
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
 
     @Embedded
     private PaymentDetails paymentDetails = new PaymentDetails();
-
     private double totalPrice;
     private double totalDiscountedPrice;
     private double discount;

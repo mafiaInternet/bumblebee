@@ -31,15 +31,7 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-//    public User findUserById(Long userId) throws UserException {
-//        Optional<User>user=userDao.findById(userId);
-//
-//        if (user.isPresent()){
-//            return user.get();
-//        }
-//        throw new UserException("User not foung with id - " + userId);
-//
-//    }
+
 
     @Override
     public User findUserProfileByJwt(String jwt) throws UserException {
@@ -80,9 +72,13 @@ public class UserServiceImpl implements UserService {
     public Address addAddress(User user, AddressRequest req) throws UserException{
         Address address = new Address();
         address.setUser(user.getId());
-        address.setCity(req.getCity());
-        address.setFirtname(req.getFirstName());
-        address.setLastName(req.getLastName());
+        address.setName(req.getName());
+        address.setMobile(req.getMobile());
+        address.setDescription(req.getDescription());
+        address.setProvince(req.getProvince());
+        address.setDistrict(req.getDistrict());
+        address.setWard(req.getWard());
+        address.setState(req.getState());
         addressDao.save(address);
 
         user.getAddress().add(address);
@@ -101,18 +97,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Address updateAddress(User user, int addressId, AddressRequest req)throws UserException{
-        for(Address address: user.getAddress()){
-            if(address.getState().equals("Mặc định")){
-                address.setState("");
-                addressDao.save(address);
-            }
-        }
         for(Address address:user.getAddress()){
             if(address.getId() == addressId){
-                address.setCity(req.getCity());
-                address.setFirtname(req.getFirstName());
-                address.setLastName(req.getLastName());
+                address.setUser(user.getId());
+                address.setName(req.getName());
+                address.setMobile(req.getMobile());
+                address.setDescription(req.getDescription());
+                address.setProvince(req.getProvince());
+                address.setDistrict(req.getDistrict());
+                address.setWard(req.getWard());
                 address.setState(req.getState());
+
                 return addressDao.save(address);
             }
         }
