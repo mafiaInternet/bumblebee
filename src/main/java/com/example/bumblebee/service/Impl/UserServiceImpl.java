@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserAdmin(String jwt) throws Exception {
+        public User findUserAdmin(String jwt) throws Exception {
         String email = jwtProvider.getEmailFromToken(jwt);
         User user=userDao.findByEmail(email);
 
@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
 
     @Override
     public Address addAddress(User user, AddressRequest req) throws UserException{

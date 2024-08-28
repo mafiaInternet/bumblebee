@@ -61,13 +61,20 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/user/changePassword")
-    public ResponseEntity<User> changePassword(@RequestHeader("Authorization") String jwt, @RequestBody User user) throws Exception {
-        User userJwt = userService.findUserProfileByJwt(jwt);
-        User updateUser = new User();
+    @PutMapping("/user/update")
+    public ResponseEntity<User> putUser(@RequestHeader("Authorization") String jwt, @RequestBody User user) throws Exception {
+        User updateUser = userService.findUserProfileByJwt(jwt);
+        if (updateUser.getId() != user.getId()){
+            throw new Exception("Bạn không có quyền");
+        }
         updateUser.setName(user.getName());
-        updateUser.setPassword(user.getPassword());
-        return new ResponseEntity<>(userJwt, HttpStatus.ACCEPTED);
+        updateUser.setMobile(user.getMobile());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setBirthday(user.getBirthday());
+        if (user.getPassword() != null){
+            updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        return new ResponseEntity<>(updateUser, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/user/address/add")

@@ -103,8 +103,8 @@ public class Config {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOriginPatterns(Collections.singletonList("https://get-cookie-xss.000webhostapp.com/"));
-        configuration.setAllowedOriginPatterns(Collections.singletonList("https://frontendbumblebee.onrender.com"));
+        configuration.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
+//        configuration.setAllowedOriginPatterns(Collections.singletonList("https://frontendbumblebee.onrender.com"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);

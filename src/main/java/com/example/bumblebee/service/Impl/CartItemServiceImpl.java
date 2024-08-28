@@ -81,16 +81,4 @@ public class CartItemServiceImpl implements CartItemService {
         cartItemDao.deleteById(cartItemId);
     }
 
-    @Override
-    public CartItem findCartItemById(Long cartItemId) throws CartException {
-
-        Optional<CartItem> opt=cartItemDao.findById(cartItemId);
-
-        if(opt.isPresent()){
-            return opt.get();
-        }
-        throw new CartException("Cart Item not found with id - " + cartItemId);
-
-
-    }
 }

@@ -92,7 +92,6 @@ public class AuthController {
 
         Authentication authentication= authenticate(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("auth"+authentication.toString());
         String token = jwtProvider.generateToken(authentication);
 
         AuthResponse authResponse=new AuthResponse(token, "Sign in success");

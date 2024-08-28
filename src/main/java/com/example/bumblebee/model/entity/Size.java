@@ -1,5 +1,6 @@
 package com.example.bumblebee.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +17,9 @@ public class Size {
 
     private String name;
     private int quantity;
-
+    @JsonIgnore
+    @ManyToOne
+    private Color color;
 
     @Override
     public String toString() {
