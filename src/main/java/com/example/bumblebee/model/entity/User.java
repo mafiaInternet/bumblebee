@@ -25,6 +25,7 @@ public class User {
     private String email;
     private String birthday;
     private String role;
+    private double Fpoint;
     private String mobile;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address=new ArrayList<>();

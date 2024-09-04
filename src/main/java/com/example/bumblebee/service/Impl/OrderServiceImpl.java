@@ -203,6 +203,11 @@ private CartItemService cartItemService;
     @Override
     public Order statusOrder(Long orderId, String status) throws OrderException{
         Order order = findOderById(orderId);
+        if (status.equals("Hoàn tất")){
+            Optional<User> user = userDao.findById(order.getUser().getId());
+            user.get().setFpoint(user.get().getFpoint() - order.getFpoint());
+            userDao.save(user.get());
+        }
         order.setOrderStatus(status);
         return orderDao.save(order);
     }

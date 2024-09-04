@@ -36,8 +36,9 @@ public class Order {
     private Address address;
     @Embedded
     private PaymentDetails paymentDetails = new PaymentDetails();
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Voucher> vouchers = new ArrayList<>();
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Voucher> vouchers = new ArrayList<>();
+    private double Fpoint;
     private double totalPrice;
     private double totalDiscountedPrice;
     private double discount;
