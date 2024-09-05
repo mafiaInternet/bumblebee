@@ -66,9 +66,9 @@ public class ProductController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @GetMapping("/product/{productId}")
-    public ResponseEntity<Product>findProductByIdHandler(@PathVariable Long productId) throws ProductException{
-        Product product=productService.findProductById(productId);
+    @GetMapping("/product/{id}")
+    public ResponseEntity<Product>findProductByIdHandler(@PathVariable Long id) throws ProductException{
+        Product product=productService.findProductById(id);
         return new ResponseEntity<>(product, HttpStatus.ACCEPTED);
     }
 
@@ -86,14 +86,8 @@ public class ProductController {
 
         if(category.equals("") && title.equals("")){
             products = productDao.findAll();
-            System.out.println("product - all" );
-
         }else{
-
             products = productService.findProducts(category, title);
-            System.out.println("product - find");
-            System.out.println("category - " + category);
-            System.out.println("title - " + title);
         }
 
         return new ResponseEntity<>(products, HttpStatus.ACCEPTED);

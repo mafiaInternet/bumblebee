@@ -20,7 +20,7 @@ public class AdminCustomerController {
     @Autowired
     private UserDao userDao;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<List<User>> getCustomersAll(@RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
         List<User> userList = userDao.findAll();

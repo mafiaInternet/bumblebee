@@ -64,35 +64,27 @@ private CartItemService cartItemService;
 
     }
 
-    @Override
-    public CheckOut createCheckOut(User user, CreateOrderRequest createOrderRequest) throws UserException, CartException{
-        CheckOut checkOut = new CheckOut();
-        List<OrderItem> orderItems = new ArrayList<>();
+    public void handleCreateOrder (CartItem cartItem) throws ProductException {
+        Product product = productService.findProductById(cartItem.getProduct().getId());
+        System.out.println("product order - " + product.toString());
+        for(Color color: product.getColors()){
+            if(color.getName().equals(cartItem.getColor())){
 
-        Cart cart = createOrderRequest.getCart();
-        for(CartItem item:cart.getCartItems()){
+                for(Size size: color.getSizes()){
 
-            OrderItem createdOrderItem = orderItemService.createOrderItem(item);
-            orderItems.add(createdOrderItem);
+                    if(size.getName().equals(cartItem.getSize())){
+                        System.out.println("hello");
+                        size.setQuantity(size.getQuantity()-cartItem.getQuantity());
+                        product.setTotalQuantity(product.getTotalQuantity() - cartItem.getQuantity());
+                        product.setTotalSold(product.getTotalSold() + cartItem.getQuantity());
 
+                    }
+                }
+            }
         }
+        productDao.save(product);
 
-        checkOut.setUser(user);
-//        checkOut.setOrderItems(orderItems);
-        double totalDiscountedPersent = cart.getTotalDiscountedPrice() / cart.getTotalPrice() * 100;
-        checkOut.setTotalDiscountedPersent(totalDiscountedPersent);
-        checkOut.setTotalPrice(cart.getTotalPrice());
-        checkOut.setTotalDiscountedPrice(cart.getTotalDiscountedPrice());
-
-        return checkOut;
     }
-
-    @Override
-    public List<Object[]> delete(User user) {
-        return null;
-    }
-
-
     @Override
     public Order addOrder(User user, CreateOrderRequest createOrderRequest) throws ProductException {
         Order createOrder = new Order();
@@ -126,55 +118,6 @@ private CartItemService cartItemService;
 
         return saveOrder;
     }
-
-    public void handleCreateOrder (CartItem cartItem) throws ProductException {
-            Product product = productService.findProductById(cartItem.getProduct().getId());
-        System.out.println("product order - " + product.toString());
-            for(Color color: product.getColors()){
-                if(color.getName().equals(cartItem.getColor())){
-
-                    for(Size size: color.getSizes()){
-
-                        if(size.getName().equals(cartItem.getSize())){
-                            System.out.println("hello");
-                            size.setQuantity(size.getQuantity()-cartItem.getQuantity());
-                            product.setTotalQuantity(product.getTotalQuantity() - cartItem.getQuantity());
-                            product.setTotalSold(product.getTotalSold() + cartItem.getQuantity());
-
-                        }
-                    }
-                }
-            }
-        productDao.save(product);
-
-    }
-
-    @Override
-    public Order pendingOrder(Long orderId) throws OrderException {
-        Order order = findOderById(orderId);
-        order.setOrderStatus("PENDING");
-
-        return orderDao.save(order);
-    }
-
-
-    @Override
-    public Order confirmedOrder(Long orderId) throws OrderException {
-        Order order = findOderById(orderId);
-        order.setOrderStatus("COMFIRMED");
-
-        return orderDao.save(order);
-    }
-
-    @Override
-    public Order deliveringOrder(Long orderId) throws OrderException{
-        Order order=findOderById(orderId);
-        order.setOrderStatus("DELIVERING");
-
-        return orderDao.save(order);
-    }
-
-
     @Override
     public List<Order> usersOrderHistory(Long userId) {
         List<Order> orders = orderDao.getOrderByUser(userId);
@@ -183,25 +126,8 @@ private CartItemService cartItemService;
         return orders;
     }
 
-
     @Override
-    public Order deliveredOrder(Long orderId) throws OrderException {
-        Order order=findOderById(orderId);
-        order.setOrderStatus("DELIVERED");
-
-        return orderDao.save(order);
-    }
-
-    @Override
-    public Order canceledOrder(Long orderId) throws OrderException {
-        Order order=findOderById(orderId);
-        order.setOrderStatus("CANCLED");
-
-        return orderDao.save(order);
-    }
-
-    @Override
-    public Order statusOrder(Long orderId, String status) throws OrderException{
+    public Order putStatusOrderByAdmin(Long orderId, String status) throws OrderException{
         Order order = findOderById(orderId);
         if (status.equals("Hoàn tất")){
             Optional<User> user = userDao.findById(order.getUser().getId());
