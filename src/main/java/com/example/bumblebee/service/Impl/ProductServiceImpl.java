@@ -25,7 +25,8 @@ public class ProductServiceImpl implements ProductService {
     private final UserService userService;
     private final ColorDao colorDao;
     private final SizeDao sizeDao;
-    public ProductServiceImpl(ProductDao productDao, UserService userService, CategoryService categoryService, CategoryDao categoryDao, ColorDao colorDao, SizeDao sizeDao){
+
+    public ProductServiceImpl(ProductDao productDao, UserService userService, CategoryService categoryService, CategoryDao categoryDao, ColorDao colorDao, SizeDao sizeDao) {
         this.productDao = productDao;
         this.userService = userService;
         this.categoryService = categoryService;
@@ -33,39 +34,40 @@ public class ProductServiceImpl implements ProductService {
         this.colorDao = colorDao;
         this.sizeDao = sizeDao;
     }
+
     @Override
     public Product createProduct(CreateProductRequest req) {
-
-
-        Product product=new Product();
-
+        Product product = new Product();
+        productDao.save(product);
         Category category = categoryService.findByNameId(req.getCategory().getNameId());
 
-        for(String item : req.getListImageUrl()){
+        for (String item : req.getListImageUrl()) {
             product.getListImageUrl().add(item);
         }
 
-        List<Color> colors = new ArrayList<>();
-        for(Color color: req.getColors()){
+        for (Color color : req.getColors()) {
             Color createColor = new Color();
             createColor.setImageUrl(color.getImageUrl());
             createColor.setName(color.getName());
-            List<Size> sizes = new ArrayList<>();
-            for(Size size : color.getSizes()){
+            createColor.setProduct(product);
+            colorDao.save(createColor);
+
+            for (Size size : color.getSizes()) {
                 Size createSize = new Size();
                 createSize.setName(size.getName());
                 createSize.setQuantity(size.getQuantity());
 
-                sizes.add(sizeDao.save(createSize));
+                createColor.getSizes().add(size);
+
+                createSize.setColor(createColor);
+                sizeDao.save(createSize);
+
             }
-            createColor.setSizes(sizes);
+            colorDao.save(createColor);
+            product.getColors().add(color);
 
-            Color saveColor = colorDao.save(createColor);
-
-            colors.add(saveColor);
         }
         product.setTitle(req.getTitle());
-        product.setColors(colors);
         product.setDescription(req.getDescription());
         int discountdPrice = req.getPrice() * req.getDiscountPersent() / 100;
         product.setDiscountedPrice(discountdPrice);
@@ -75,15 +77,15 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(category);
         product.setCreateAt(LocalDateTime.now());
 
-        Product savedProduct =productDao.save(product);
+        Product savedProduct = productDao.save(product);
 
         return savedProduct;
     }
 
     @Override
     public String deleteProduct(Long productId) throws ProductException {
-        Product product=findProductById(productId);
-            productDao.delete(product);
+        Product product = findProductById(productId);
+        productDao.delete(product);
         System.out.println();
         return "Product deleted Success!!!";
     }
@@ -99,8 +101,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findProductById(long productId) throws ProductException {
 //        Optional<Product> opt=productDao.findById(productId);
-        for(Product product: productDao.findAll()){
-            if(product.getId() == productId){
+        for (Product product : productDao.findAll()) {
+            if (product.getId() == productId) {
                 return product;
             }
         }
@@ -109,7 +111,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findProductByCategory(String category) {
-        if(category.equals("all")){
+        if (category.equals("all")) {
             return productDao.findAll();
         }
         List<Product> products = productDao.getProductsByCategory(category);
@@ -122,8 +124,9 @@ public class ProductServiceImpl implements ProductService {
 
         return productDao.findAll();
     }
+
     @Override
-    public List<Product> findProducts( String category, String title){
+    public List<Product> findProducts(String category, String title) {
         List<Product> products = productDao.filterProduct(category, title);
         return products;
 
@@ -131,20 +134,20 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<Product> getProductsNewByCategory(){
+    public List<Product> getProductsNewByCategory() {
 
         List<Category> categorys = categoryDao.findAll();
 //        ArrayList<Product> productsByCategoryNew = new ArrayList<>();
         List<Product> productsByCategoryNew = new ArrayList<>();
 
 
-        for(Category category: categorys){
+        for (Category category : categorys) {
             List<Product> productList = productDao.getProductsByCategory(category.getNameId());
 
             Collections.sort(productList, Comparator.comparing(Product::getCreateAt));
             int i = 0;
-            for (Product product: productList){
-                if(i < 7){
+            for (Product product : productList) {
+                if (i < 7) {
                     productsByCategoryNew.add(product);
                     i++;
                 }
@@ -152,11 +155,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
 
-    return productsByCategoryNew;
+        return productsByCategoryNew;
     }
 
     @Override
-    public List<Product> sortProductByPriceHigh(List<Product> products){
+    public List<Product> sortProductByPriceHigh(List<Product> products) {
 
         Collections.sort(products, new Comparator<Product>() {
             @Override
@@ -169,7 +172,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> sortProductByPriceLow(List<Product> products){
+    public List<Product> sortProductByPriceLow(List<Product> products) {
 
         Collections.sort(products, new Comparator<Product>() {
             @Override
@@ -182,7 +185,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> sortProductsNew(List<Product> products){
+    public List<Product> sortProductsNew(List<Product> products) {
 
         Collections.sort(products, new Comparator<Product>() {
             @Override
@@ -195,7 +198,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> sortProductsOld(List<Product> products){
+    public List<Product> sortProductsOld(List<Product> products) {
 
         Collections.sort(products, new Comparator<Product>() {
             @Override
@@ -209,8 +212,8 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public void createCategory(){
-       categoryService.createCategory();
+    public void createCategory() {
+        categoryService.createCategory();
 
 
     }

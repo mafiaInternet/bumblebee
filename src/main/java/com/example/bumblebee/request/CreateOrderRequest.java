@@ -16,6 +16,5 @@ public class CreateOrderRequest {
     private Cart cart;
     private String paymentMethod;
     private int discountedPrice;
-
-
+    private double fpoint;
 }

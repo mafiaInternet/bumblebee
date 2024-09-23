@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,7 +22,8 @@ public class Color {
     @JsonIgnore
     @ManyToOne
     private Product product;
-    @OneToMany
-    private List<Size> sizes;
+
+    @OneToMany(mappedBy = "color", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Size> sizes = new ArrayList<>();
 
 }

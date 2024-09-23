@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
 public class AuthController {
 
     @Autowired
@@ -39,9 +38,7 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
     }
-
     @PostMapping("/signup")
-    @CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
     public ResponseEntity<AuthResponse>createUserHandler(@RequestBody User user) throws Exception {
         String email=user.getEmail();
         String password=user.getPassword();
@@ -49,7 +46,7 @@ public class AuthController {
         String mobile = user.getMobile();
         User isEmailExist= userDao.findByEmail(email);
         if(isEmailExist!=null){
-            throw new UserException("Email is Already Userd anothor accoung");
+            throw new UserException("Email is Already Userd anothor account");
         }
 
         User createUser=new User();
@@ -70,7 +67,6 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
     public ResponseEntity<AuthResponse>loginUserHandler(@RequestBody LoginRequest loginRequest) throws Exception {
         String username=loginRequest.getEmail();
         String password=loginRequest.getPassword();
@@ -100,7 +96,6 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    @CrossOrigin(origins = "https://get-cookie-xss.000webhostapp.com")
     public ResponseEntity<AuthResponse> logoutUserHandler(){
 
         AuthResponse authResponse = new AuthResponse(null, "Logout success");

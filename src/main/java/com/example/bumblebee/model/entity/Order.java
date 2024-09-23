@@ -22,7 +22,6 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String orderId;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -50,7 +49,6 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", orderId='" + orderId + '\'' +
                 ", user=" + user +
                 ", orderItems=" + orderItems +
                 ", orderDate=" + orderDate +

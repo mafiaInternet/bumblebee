@@ -24,7 +24,7 @@ public class Cart {
     @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "cart_items")
     private Set<CartItem> cartItems = new HashSet<>();
 
@@ -35,6 +35,13 @@ public class Cart {
     private double totalDiscountedPrice;
     private double discount;
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public String toString() {
@@ -48,4 +55,5 @@ public class Cart {
                 ", discount=" + discount +
                 '}';
     }
+
 }

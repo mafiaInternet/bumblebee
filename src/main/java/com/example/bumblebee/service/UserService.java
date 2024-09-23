@@ -6,7 +6,6 @@ import com.example.bumblebee.model.entity.User;
 import com.example.bumblebee.request.AddressRequest;
 
 public interface UserService {
-//    public User findUserById(Long userId) throws UserException;
 
     User findUserById(Long userId) throws UserException;
 

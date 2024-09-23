@@ -24,14 +24,15 @@ public class Product implements Comparable<Product>  {
     private String title;
 @Column(length = 2048)
     private List<String> listImageUrl = new ArrayList<>();
+@Column(length = 2048)
     private String description;
     private int price;
     private int discountedPrice;
     private int discountPersent;
     private int totalQuantity;
     private int totalSold;
-    @OneToMany
-    private List<Color> colors;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Color> colors = new ArrayList<>();
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Review> reviews=new ArrayList<>();

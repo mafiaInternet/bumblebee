@@ -12,10 +12,11 @@ import com.example.bumblebee.service.CartItemService;
 import com.example.bumblebee.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class CartItemServiceImpl implements CartItemService {
+public class CartItemServiceImpl implements CartItemService  {
     private CartItemDao cartItemDao;
     private UserService userService;
     private CartDao cartDao;
@@ -80,5 +81,7 @@ public class CartItemServiceImpl implements CartItemService {
     public void deleteCartItems(Long userId, Long cartItemId) throws CartException, UserException {
         cartItemDao.deleteById(cartItemId);
     }
+
+
 
 }

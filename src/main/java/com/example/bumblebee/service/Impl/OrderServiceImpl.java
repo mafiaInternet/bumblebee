@@ -108,6 +108,7 @@ private CartItemService cartItemService;
        createOrder.setTotalPrice(cart.getTotalPrice());
        createOrder.setOrderStatus("Đang chờ xác nhận");
         createOrder.setAddress(address);
+        createOrder.setFpoint(createOrderRequest.getFpoint());
         createOrder.setCreateAt(LocalDateTime.now());
         Order saveOrder = orderDao.save(createOrder);
 
