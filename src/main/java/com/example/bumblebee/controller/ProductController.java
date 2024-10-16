@@ -31,7 +31,7 @@ public class ProductController {
 
     public ResponseEntity<List<Product>> getProducts(){
         List<Product> list = productDao.findAll();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/sort/new")
@@ -81,13 +81,19 @@ public class ProductController {
 
 
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> findProduct(@RequestParam("title") String title, @RequestParam("category") String category){
+    public ResponseEntity<List<Product>> findProduct(@RequestParam("title") String title, @RequestParam("category") String category) throws ProductException {
         List<Product> products = new ArrayList<>();
-
         if(category.equals("") && title.equals("")){
             products = productDao.findAll();
-        }else{
-            products = productService.findProducts(category, title);
+
+        }
+        else{
+            if(category.equals("all")){
+                products = productService.findProducts("", title);
+            }else {
+                products = productService.findProducts(category, title);
+            }
+
         }
 
         return new ResponseEntity<>(products, HttpStatus.ACCEPTED);

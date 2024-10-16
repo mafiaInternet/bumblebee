@@ -10,7 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ProductDao extends JpaRepository<Product, Long> {
-    @Query("SELECT p FROM Product p WHERE (p.category.name = :category OR :category='') AND (p.title =:title OR :title ='') ")
+//    p.category.name LIKE CONCAT('%', :category, '%') OR
+    @Query("SELECT p FROM Product p WHERE ( (p.category.name LIKE CONCAT('%', :category, '%') OR p.category.nameId LIKE CONCAT('%', :category, '%')) OR :category='') AND (p.title LIKE CONCAT('%', :title, '%') OR :title ='') ")
     public List<Product>filterProduct(@Param("category") String category,
                                       @Param("title") String title);
 

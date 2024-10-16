@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserProfileByJwt(String jwt) throws UserException {
-
         String email = jwtProvider.getEmailFromToken(jwt);
         System.out.println(email);
         User user=userDao.findByEmail(email);

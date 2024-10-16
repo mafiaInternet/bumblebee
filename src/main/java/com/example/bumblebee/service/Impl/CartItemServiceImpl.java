@@ -8,11 +8,11 @@ import com.example.bumblebee.model.entity.Cart;
 import com.example.bumblebee.model.entity.CartItem;
 import com.example.bumblebee.model.entity.Product;
 import com.example.bumblebee.model.entity.User;
+import com.example.bumblebee.request.AddItemRequest;
 import com.example.bumblebee.service.CartItemService;
 import com.example.bumblebee.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -27,32 +27,29 @@ public class CartItemServiceImpl implements CartItemService  {
         this.cartDao = cartDao;
     }
     @Override
-    public CartItem createCartItem(CartItem cartItem) {
-        cartItem.setColor(cartItem.getColor());
-        cartItem.setImageUrl(cartItem.getImageUrl());
-        cartItem.setQuantity(cartItem.getQuantity());
-        cartItem.setPrice(cartItem.getProduct().getPrice()*cartItem.getQuantity());
-        cartItem.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice()*cartItem.getQuantity());
-        cartItem.setProduct(cartItem.getProduct());
-        CartItem createdCartItem = cartItemDao.save(cartItem);
-
-        return createdCartItem;
+    public CartItem createCartItem(AddItemRequest req, Product product, User user, Cart cart) {
+        CartItem cartItem = new CartItem();
+        cartItem.setColor(req.getColor());
+        cartItem.setSize(req.getSize());
+        cartItem.setImageUrl(req.getImageUrl());
+        cartItem.setQuantity(req.getQuantity());
+        cartItem.setProduct(product);
+        cartItem.setUserId(user.getId());
+        cartItem.setCart(cart);
+        return cartItemDao.save(cartItem);
     }
 
     @Override
-    public CartItem updateCartItem(User user, Long id, int quantity) throws CartException {
+    public CartItem updateCartItem(User user, Long id,boolean status, int quantity) throws CartException {
         Optional<CartItem> cartItem =cartItemDao.findById(id);
         CartItem item = cartItem.get();
-        System.out.println(item.getUserId());
-        System.out.println("user -" + user.getId());
         if(item.getUserId() == user.getId()){
+            item.setStatus(status);
             item.setQuantity(quantity);
             item.setPrice(item.getQuantity()*item.getProduct().getPrice());
             item.setDiscountedPrice(item.getProduct().getDiscountedPrice()*item.getQuantity());
             return cartItemDao.save(item);
-
         }
-
         return null;
     }
 
@@ -67,11 +64,12 @@ public class CartItemServiceImpl implements CartItemService  {
     }
 
     @Override
-    public Cart removeCartItem(Long userId, Long[] cartItemIds) throws CartException, UserException {
+    public Cart removeCartItem(Long userId, int[] cartItemIds) throws CartException, UserException {
         Cart cart = cartDao.findByUserId(userId);
         for(long cartItemId: cartItemIds){
             cartItemDao.deleteById(cartItemId);
-
+            Optional<CartItem> cartItem = cartItemDao.findById(cartItemId);
+            cart.getCartItems().remove(cartItem.get());
         }
         cart.setTotalItem(cart.getCartItems().size());
         return cartDao.save(cart);

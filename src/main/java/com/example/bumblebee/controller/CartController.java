@@ -9,6 +9,7 @@ import com.example.bumblebee.model.entity.User;
 import com.example.bumblebee.request.AddItemRequest;
 import com.example.bumblebee.request.AddItemRequestWrapper;
 import com.example.bumblebee.request.AddOrderItemRequest;
+import com.example.bumblebee.request.UpdateCartItem;
 import com.example.bumblebee.response.ApiResponse;
 import com.example.bumblebee.service.CartItemService;
 import com.example.bumblebee.service.CartService;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
@@ -33,8 +36,8 @@ public class CartController {
     @Autowired
     private CartDao cartDao;
     @GetMapping("/user")
-    public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt) throws Exception {
-        User user=userService.findUserProfileByJwt(jwt);
+    public ResponseEntity<Cart>getCartByUser(@RequestHeader("Authorization") String jwt) throws UserException {
+       User user  = userService.findUserProfileByJwt(jwt);
         Cart cart=cartDao.findByUserId(user.getId());
 
         return new ResponseEntity<>(cart, HttpStatus.ACCEPTED);
@@ -60,10 +63,10 @@ public class CartController {
 
 
 
-    @DeleteMapping("/cartItem/1/delete")
-    public ResponseEntity<ApiResponse> deleteCartItems(@RequestBody Long cartItemId, @RequestHeader("Authorization") String jwt) throws Exception {
+    @DeleteMapping("/cartItem/{id}/delete")
+    public ResponseEntity<ApiResponse> deleteCartItems(@PathVariable Long cartItemId, @RequestHeader("Authorization") String jwt) throws Exception {
         User user=userService.findUserProfileByJwt(jwt);
-       cartItemService.deleteCartItems(user.getId(), cartItemId);
+         cartItemService.deleteCartItems(user.getId(), cartItemId);
         ApiResponse res = new ApiResponse();
         res.setMessage("Delete item");
         res.setStatus(true);
@@ -71,20 +74,27 @@ public class CartController {
     }
 
     @DeleteMapping("/cartItem/delete")
-    public ResponseEntity<Cart>removeItemToCart(@RequestBody Long[] cartItemIds, @RequestHeader("Authorization") String jwt) throws UserException, CartException {
+    public ResponseEntity<Cart>removeItemToCart(@RequestBody int[] cartItemIds, @RequestHeader("Authorization") String jwt) throws UserException, CartException {
         User user = userService.findUserProfileByJwt(jwt);
 
+        System.out.println(cartItemIds);
+        System.out.println("abc hello");
+        for (int number : cartItemIds) {
+            System.out.println(number);
+        }
         Cart cart = cartItemService.removeCartItem(user.getId(), cartItemIds);
 
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+        return new ResponseEntity<>(cart, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/cartItem/{cartItemId}/update")
-    public ResponseEntity<Cart> updateCartItem(@PathVariable Long cartItemId, @RequestHeader("Authorization") String jwt, @RequestBody int quantity) throws Exception {
+    public ResponseEntity<ApiResponse> updateCartItem(@PathVariable Long cartItemId, @RequestHeader("Authorization") String jwt, @RequestBody UpdateCartItem req) throws Exception {
         User user =userService.findUserProfileByJwt(jwt);
-        cartItemService.updateCartItem(user, cartItemId, quantity);
-        Cart cart = cartDao.findByUserId(user.getId());
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+        cartItemService.updateCartItem(user, cartItemId, req.isStatus(), req.getQuantity());
+        ApiResponse res = new ApiResponse();
+        res.setMessage("Update CartItem Success");
+        res.setStatus(true);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PutMapping("/test")

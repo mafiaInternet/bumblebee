@@ -74,6 +74,7 @@ public class UserController {
         if (user.getPassword() != null){
             updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+        userDao.save(updateUser);
         return new ResponseEntity<>(updateUser, HttpStatus.ACCEPTED);
     }
 

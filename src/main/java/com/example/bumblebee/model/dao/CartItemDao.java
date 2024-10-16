@@ -14,4 +14,5 @@ public interface CartItemDao extends JpaRepository<CartItem, Long> {
     public CartItem isCartItemExist(@Param("cart") Cart cart, @Param("product")Product product,@Param("color") String color, @Param("size")String size,
                                     @Param("userId")Long userId);
 
+
 }

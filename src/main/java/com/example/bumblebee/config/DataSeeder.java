@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 
-@Component
+
 public class DataSeeder {
     private final CategoryService categoryService;
     private final UserDao userDao;

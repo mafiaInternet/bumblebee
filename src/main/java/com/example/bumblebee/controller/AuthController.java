@@ -70,14 +70,10 @@ public class AuthController {
     public ResponseEntity<AuthResponse>loginUserHandler(@RequestBody LoginRequest loginRequest) throws Exception {
         String username=loginRequest.getEmail();
         String password=loginRequest.getPassword();
-
         Authentication authentication= authenticate(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("auth"+authentication.toString());
         String token = jwtProvider.generateToken(authentication);
-
         AuthResponse authResponse=new AuthResponse(token, "Sign in success");
-
         return new ResponseEntity<>(authResponse, HttpStatus.ACCEPTED);
     }
 

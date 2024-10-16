@@ -133,6 +133,9 @@ private CartItemService cartItemService;
         if (status.equals("Hoàn tất")){
             Optional<User> user = userDao.findById(order.getUser().getId());
             user.get().setFpoint(user.get().getFpoint() - order.getFpoint());
+            for (OrderItem orderItem : order.getOrderItems()){
+                orderItem.getProduct().setTotalSold(orderItem.getProduct().getTotalSold() + orderItem.getQuantity());
+            }
             userDao.save(user.get());
         }
         order.setOrderStatus(status);
