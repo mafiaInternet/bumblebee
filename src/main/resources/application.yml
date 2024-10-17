@@ -7,11 +7,11 @@ spring:
       allow-credentials: true
       max-age: 3600
   datasource:
-#    url: jdbc:mysql://root:xniJeYxlnZmzhAFAIZtZfRhDIMlmgFQw@viaduct.proxy.rlwy.net:54131/railway
-    url: jdbc:mysql://localhost:3306/bumblebee
+    url: jdbc:mysql://root:xniJeYxlnZmzhAFAIZtZfRhDIMlmgFQw@viaduct.proxy.rlwy.net:54131/railway
+#    url: jdbc:mysql://localhost:3306/bumblebee
     username: root
-    password: Anhyeuem@1
-#    password: xniJeYxlnZmzhAFAIZtZfRhDIMlmgFQw
+#    password: Anhyeuem@1
+    password: xniJeYxlnZmzhAFAIZtZfRhDIMlmgFQw
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
